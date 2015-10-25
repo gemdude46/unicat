@@ -50,7 +50,7 @@ def parseStmt():
         return ("asgnlit",parseNbr(),parseNbr())
     if c[0] == '5' and c[1] == '7':
         c=c[2:]
-        return ("jumpif0",parseNbr(),parseNbr())
+        return ("jumpif>",parseNbr(),parseNbr())
     if c[0] == '5' and c[1] == '4':
         c=c[2:]
         return ("echovar",parseNbr())
@@ -76,7 +76,7 @@ while True:
         sys.exit()
     if it[0] == "asgnlit":
         mem[it[1]]=it[2]
-    if it[0] == "jumpif0" and mem.get(it[1],0) == 0:
+    if it[0] == "jumpif>" and mem.get(it[1],0) > 0:
         mem[-1]=it[2]
     if it[0] == "applop+":
         mem[it[1]]=mem.get(it[1],0)+mem.get(it[2],0)
