@@ -1,4 +1,4 @@
-import sys
+import sys, random
 if len(sys.argv) != 2:
     sys.exit(-1)
 
@@ -58,6 +58,9 @@ def parseStmt():
     if c[0] == '4' and c[1] == '6':
         c=c[2:]
         return ("pointer",parseNbr())
+    if c[0] == '8' and c[1] == '3':
+        c=c[2:]
+        return ("randomb",parseNbr())
     if c[0] == '2' and c[1] == '4':
         c=c[2:]
         return ("inputst",parseNbr())
@@ -87,6 +90,8 @@ while True:
         sys.exit()
     if it[0] == "pointer":
         mem[it[1]]=mem.get(mem.get(it[1],0),0)
+    if it[0] == "randomb":
+        mem[it[1]]=random.randint(True,False)
     if it[0] == "asgnlit":
         mem[it[1]]=it[2]
     if it[0] == "jumpif>" and mem.get(it[1],0) > 0:
