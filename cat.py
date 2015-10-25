@@ -37,6 +37,7 @@ def parseNbr():
     if c[0] == '7':
         n='-'+n
     c=c[1:]
+    if n in ('','-'): return 0
     return int(n,8)
         
 
@@ -54,11 +55,19 @@ def parseStmt():
     if c[0] == '5' and c[1] == '4':
         c=c[2:]
         return ("echovar",parseNbr())
+    if c[0] == '4' and c[1] == '6':
+        c=c[2:]
+        return ("pointer",parseNbr())
+    if c[0] == '2' and c[1] == '4':
+        c=c[2:]
+        return ("inputst",parseNbr())
     if c[0] == '7' and c[1] == '8':
         c=c[2:]
         if len(c) == 0:
             return ("asgnlit",-1,-1)
-        return ("applop"+{2:'-',8:'*',7:'/'}.get(int(c[0]),'+'))
+        xc=c[0]
+        c=c[1:]
+        return ("applop"+{2:'-',8:'*',7:'/'}.get(int(xc),'+'),parseNbr(),parseNbr())
     if c[0] == '8' and c[1] == '8':
         c=c[2:]
         return ("diepgrm",)
@@ -68,12 +77,16 @@ def parseStmt():
 while len(c) > 0:
     ins.append(parseStmt())
 
+#print ins
+
 while True:
     mem[-1]=mem.get(-1,-1)+1
     try: it = ins[mem[-1]]
     except IndexError: it = ("asgnlit",-1,-1)
     if it[0] == "diepgrm":
         sys.exit()
+    if it[0] == "pointer":
+        mem[it[1]]=mem.get(mem.get(it[1],0),0)
     if it[0] == "asgnlit":
         mem[it[1]]=it[2]
     if it[0] == "jumpif>" and mem.get(it[1],0) > 0:
@@ -88,3 +101,8 @@ while True:
         mem[it[1]]=mem.get(it[1],0)*mem.get(it[2],0)
     if it[0] == "echovar":
         sys.stdout.write(unichr(mem.get(it[1],0)))
+    if it[0] == "inputst":
+        inp = sys.stdin.readline()
+        for k in range(it[1],it[1]+len(inp)):
+            mem[k]=ord(inp[k-it[1]])
+        mem[k+1]=0
