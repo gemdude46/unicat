@@ -55,6 +55,9 @@ def parseStmt():
     if c[0] == '5' and c[1] == '4':
         c=c[2:]
         return ("echovar",parseNbr())
+    if c[0] == '4' and c[1] == '4':
+        c=c[2:]
+        return ("echoval",parseNbr())
     if c[0] == '4' and c[1] == '6':
         c=c[2:]
         return ("pointer",parseNbr())
@@ -106,6 +109,8 @@ while True:
         mem[it[1]]=mem.get(it[1],0)*mem.get(it[2],0)
     if it[0] == "echovar":
         sys.stdout.write(unichr(mem.get(it[1],0)))
+    if it[0] == "echoval":
+        sys.stdout.write(str(mem.get(it[1],0)))
     if it[0] == "inputst":
         inp = sys.stdin.readline()
         for k in range(it[1],it[1]+len(inp)):
